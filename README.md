@@ -1,29 +1,57 @@
 # TTLock BLE Panel Bridge
 
-Private HACS integration that adds `ttlock_ble_panel.get_passcodes` for the
-Access Panel without replacing or patching the official `ttlock_ble` integration.
+Integração HACS privada que adiciona `ttlock_ble_panel.get_passcodes` ao Access
+Panel sem substituir, copiar ou modificar a integração oficial `ttlock_ble`.
 
-## Security boundary
+## O que ela faz
 
-The service returns real PINs only in the response to an authenticated Home
-Assistant service call. It does not create entities, write state, history,
-diagnostics, or logs. Anyone permitted to call this Home Assistant service can
-receive those PINs; use a dedicated, restricted Home Assistant token for the
-Access Panel and do not publish this repository.
+- Restaura somente a leitura e sincronização de PINs pelo Access Panel.
+- Não habilita criar, alterar ou excluir PINs.
+- Não altera a integração oficial `ttlock_ble`; ela continua atualizável pelo
+  HACS como antes.
 
-## Installation
+## Instalação pelo HACS
 
-Add this private GitHub repository to HACS as a custom Integration repository,
-install it, then add **TTLock BLE Panel Bridge** once under Settings → Devices
-& services. The official `ttlock_ble` integration stays installed and is not
-modified. Restart Home Assistant only when performing this installation.
+1. Confirme que a integração oficial **TTLock BLE** está instalada, carregada e
+   possui a entidade `lock.*` da fechadura.
+2. No HACS, abra o menu de três pontos → **Repositórios personalizados**.
+3. Adicione a URL deste repositório privado e escolha a categoria
+   **Integration**. A conta do GitHub conectada ao HACS precisa ter acesso a
+   este repositório.
+4. Procure por **TTLock BLE Panel Bridge** no HACS e instale-o.
+5. Reinicie o Home Assistant uma única vez para carregar o componente.
+6. Em **Configurações → Dispositivos e serviços → Adicionar integração**,
+   adicione **TTLock BLE Panel Bridge**. Não há token, senha ou configuração
+   extra para preencher.
+7. Atualize o Access Panel com a branch
+   `ttlock-panel-read-adapter`; ela passa a usar
+   `ttlock_ble_panel.get_passcodes`.
 
-The paired Access Panel version uses `ttlock_ble_panel.get_passcodes` for read
-and synchronization. It intentionally does not enable creating or deleting PINs.
+Depois disso, o painel volta a listar e sincronizar os PINs lidos por BLE.
+Antes de promover a atualização do painel, faça uma leitura manual em uma
+fechadura administrada por você.
+
+## Segurança
+
+O serviço retorna PINs reais somente na resposta de uma chamada autenticada ao
+Home Assistant. Ele não cria entidades, não grava estados, histórico,
+diagnósticos ou logs. Quem tiver permissão para chamar esse serviço poderá ler
+os PINs; use no Access Panel uma credencial própria do Home Assistant, com o
+menor privilégio compatível, e não torne este repositório público.
+
+## Atualização e rollback
+
+- Atualize normalmente pelo HACS; a integração oficial `ttlock_ble` é
+  independente desta ponte.
+- Se uma atualização da ponte falhar, use **Redownload** no HACS para voltar à
+  versão anterior disponível e reinicie o Home Assistant.
+- Para remover a ponte, remova primeiro a configuração dela em
+  **Dispositivos e serviços**, depois desinstale-a pelo HACS. Isso não remove
+  fechaduras, entidades ou o histórico de `ttlock_ble`.
 
 ## Compatibility
 
-Tested against `ha-ttlock-ble` `v3.12.2`. The bridge reads that integration's
-live runtime connection, which is not a public upstream API. If a later TTLock
-BLE update changes it, reads fail safely with a clear Home Assistant error; the
-lock itself and its official integration remain unaffected.
+Testada contra `ha-ttlock-ble` `v3.12.2`. A ponte lê a conexão ativa dessa
+integração, que não é uma API pública do upstream. Se uma atualização futura
+do TTLock BLE mudar essa interface, a leitura falhará com um erro claro no Home
+Assistant; a fechadura e a integração oficial permanecem sem alteração.
