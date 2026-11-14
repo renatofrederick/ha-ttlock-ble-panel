@@ -5,7 +5,18 @@ on:
   pull_request:
 
 jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: python -m json.tool hacs.json >/dev/null
+      - run: python -m json.tool custom_components/ttlock_ble_panel/manifest.json >/dev/null
+      - run: python -m compileall -q custom_components
   hacs:
+    if: ${{ !github.event.repository.private }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
