@@ -1,5 +1,6 @@
 {
   "name": "TTLock BLE Panel Bridge",
+  "category": "integration",
   "content_in_root": false,
   "render_readme": true,
   "homeassistant": "2026.10.4"
