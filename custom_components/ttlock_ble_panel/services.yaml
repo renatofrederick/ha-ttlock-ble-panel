@@ -1,0 +1,12 @@
+get_passcodes:
+  name: Read passcodes for Access Panel
+  description: >-
+    Returns passcodes transiently to an authenticated caller. This private
+    bridge never writes passcodes to entity state, history, diagnostics, or logs.
+  fields:
+    entity_id:
+      required: true
+      selector:
+        entity:
+          integration: ttlock_ble
+          domain: lock

@@ -1,0 +1,10 @@
+{
+  "domain": "ttlock_ble_panel",
+  "name": "TTLock BLE Panel Bridge",
+  "codeowners": ["@renatofrederick"],
+  "config_flow": true,
+  "dependencies": ["ttlock_ble"],
+  "integration_type": "service",
+  "iot_class": "local_push",
+  "version": "0.1.0"
+}
